@@ -1,0 +1,13 @@
+{
+  "name": "דקות ראשונות · First Minutes",
+  "short_name": "First Minutes",
+  "description": "Offline first-aid guide for the minutes before help arrives.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#b3261e",
+  "theme_color": "#b3261e",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

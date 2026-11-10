@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>דקות ראשונות · First Minutes</title>
+<meta name="description" content="Offline first-aid guide for the minutes before help arrives. מדריך עזרה ראשונה שעובד בלי אינטרנט.">
+<meta name="theme-color" content="#b3261e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<style>
+:root {
+  --bg: #fbf8f6; --surface: #ffffff; --text: #1d1b1a; --muted: #5f5955;
+  --line: #e4dcd7; --red: #b3261e; --red-ink: #ffffff; --red-soft: #fdecea;
+  --warn-bg: #fff4d6; --warn-ink: #5c4300; --ok: #1b6e3c;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #151312; --surface: #211e1d; --text: #f3eeeb; --muted: #b5aca6;
+    --line: #3a3532; --red: #e5484d; --red-ink: #ffffff; --red-soft: #3a1c1b;
+    --warn-bg: #3b3013; --warn-ink: #ffe08a; --ok: #6fd69a;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 18px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Hebrew", Arial, sans-serif;
+  padding-bottom: calc(96px + env(safe-area-inset-bottom));
+}
+header {
+  position: sticky; top: 0; z-index: 5; background: var(--red); color: var(--red-ink);
+  display: flex; align-items: center; gap: 8px; padding: 10px 16px;
+  padding-top: calc(10px + env(safe-area-inset-top));
+}
+header h1 { font-size: 20px; margin: 0; flex: 1; line-height: 1.2; }
+header button, header a.back {
+  background: rgba(255,255,255,.18); color: inherit; border: 0; border-radius: 10px;
+  min-width: 44px; min-height: 44px; padding: 0 12px; font: inherit; font-weight: 600;
+  cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+}
+main { max-width: 720px; margin: 0 auto; padding: 16px; }
+.lead { color: var(--muted); margin: 4px 0 16px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.tile {
+  display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: inherit;
+  background: var(--surface); border: 2px solid var(--line); border-radius: 16px;
+  padding: 16px 14px; min-height: 128px;
+}
+.tile:active { border-color: var(--red); }
+.tile .ico { font-size: 34px; line-height: 1; }
+.tile b { font-size: 19px; line-height: 1.25; }
+.tile span { color: var(--muted); font-size: 15px; line-height: 1.3; }
+.tile.urgent { background: var(--red-soft); border-color: var(--red); }
+h2 { font-size: 26px; line-height: 1.2; margin: 4px 0 6px; }
+h3 { font-size: 18px; margin: 24px 0 8px; }
+.callfirst {
+  background: var(--red-soft); border-inline-start: 6px solid var(--red);
+  padding: 12px 14px; border-radius: 10px; font-weight: 600; margin: 12px 0 16px;
+}
+ol.steps { list-style: none; padding: 0; margin: 0; counter-reset: s; display: grid; gap: 10px; }
+ol.steps li {
+  counter-increment: s; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 14px; padding: 14px 14px 14px 14px; display: grid;
+  grid-template-columns: 40px 1fr; gap: 12px; align-items: start; font-size: 19px;
+}
+ol.steps li::before {
+  content: counter(s); background: var(--red); color: var(--red-ink); font-weight: 700;
+  width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+}
+ul.plain { margin: 0; padding-inline-start: 22px; display: grid; gap: 6px; }
+.dont { background: var(--warn-bg); color: var(--warn-ink); border-radius: 14px; padding: 12px 14px; margin-top: 16px; }
+.dont h3 { margin: 0 0 6px; }
+.note { color: var(--muted); font-size: 16px; margin-top: 16px; }
+.btn {
+  font: inherit; font-weight: 700; border: 2px solid var(--line); background: var(--surface);
+  color: var(--text); border-radius: 12px; min-height: 48px; padding: 8px 16px; cursor: pointer;
+}
+.btn.primary { background: var(--red); border-color: var(--red); color: var(--red-ink); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+/* metronome */
+.metro {
+  background: var(--surface); border: 2px solid var(--red); border-radius: 18px;
+  padding: 16px; margin: 16px 0; text-align: center;
+}
+.pulse {
+  width: 150px; height: 150px; border-radius: 50%; margin: 8px auto 12px;
+  background: var(--red-soft); border: 6px solid var(--red); color: var(--red);
+  display: grid; place-items: center; font-size: 60px; font-weight: 800;
+  font-variant-numeric: tabular-nums; transition: transform .12s ease-out, background .12s;
+}
+.pulse.beat { transform: scale(1.14); background: var(--red); color: var(--red-ink); transition: none; }
+@media (prefers-reduced-motion: reduce) { .pulse, .pulse.beat { transform: none; } }
+.metro .time { font-variant-numeric: tabular-nums; color: var(--muted); }
+.swap { background: var(--warn-bg); color: var(--warn-ink); border-radius: 10px; padding: 8px 12px; margin-top: 10px; font-weight: 700; }
+/* call bar */
+.callbar {
+  position: fixed; inset-inline: 0; bottom: 0; z-index: 6; background: var(--bg);
+  border-top: 1px solid var(--line); padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+}
+.callbar a {
+  display: flex; align-items: center; justify-content: center; gap: 10px; max-width: 688px; margin: 0 auto;
+  background: var(--red); color: var(--red-ink); text-decoration: none; font-weight: 800;
+  font-size: 22px; min-height: 60px; border-radius: 16px;
+}
+dialog { border: 0; border-radius: 16px; background: var(--surface); color: var(--text); padding: 20px; width: min(92vw, 420px); }
+dialog::backdrop { background: rgba(0,0,0,.5); }
+dialog label { display: block; font-weight: 600; margin: 14px 0 6px; }
+dialog select, dialog input {
+  width: 100%; font: inherit; min-height: 48px; border-radius: 10px; border: 2px solid var(--line);
+  background: var(--bg); color: var(--text); padding: 6px 10px;
+}
+footer { color: var(--muted); font-size: 14px; margin-top: 28px; }
+:focus-visible { outline: 3px solid #1a73e8; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<header>
+  <a class="back" id="back" href="#/" hidden aria-label="Back">←</a>
+  <h1 id="appname"></h1>
+  <button id="langBtn" type="button"></button>
+  <button id="setBtn" type="button" aria-label="Settings">⚙</button>
+</header>
+<main id="view" tabindex="-1"></main>
+<div class="callbar"><a id="call" href="tel:112"></a></div>
+
+<dialog id="settings">
+  <form method="dialog">
+    <h2 id="setTitle" style="font-size:22px"></h2>
+    <label for="numSel" id="numLbl"></label>
+    <select id="numSel"></select>
+    <input id="numCustom" inputmode="tel" pattern="[0-9+*# ]{2,15}" hidden>
+    <div class="row" style="justify-content:flex-end;margin-bottom:0">
+      <button class="btn primary" id="setSave" value="ok"></button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+'use strict';
+/* ---------- content ---------- */
+const UI = {
+  he: {
+    app: 'דקות ראשונות', lang: 'English',
+    lead: 'מה לעשות עד שהעזרה מגיעה. בחרו מה קורה:',
+    call: n => `חייגו ${n}`, callfirst: n => `קודם כול: חייגו ${n} והפעילו רמקול. המוקדן ידריך אתכם.`,
+    dont: 'מה לא לעשות', read: '🔊 הקראה', stop: '⏹ עצירה',
+    metroStart: '▶ הפעלת קצב עיסויים', metroStop: '⏹ עצירה', metroHint: 'לחצו על החזה עם כל צפצוף · 110 בדקה',
+    swap: 'עברו 2 דקות — אם יש עוד מישהו, התחלפו עכשיו',
+    settings: 'הגדרות', numLbl: 'מספר החירום באזור שלכם', custom: 'אחר…', save: 'שמירה',
+    offlineOk: 'המדריך שמור במכשיר ועובד גם בלי אינטרנט.',
+    disclaimer: 'המדריך מבוסס על הנחיות עזרה ראשונה מקובלות (ILCOR / ERC / AHA), אינו תחליף לקורס עזרה ראשונה או לייעוץ רפואי, ולא מחליף את הוראות המוקדן. במקרה חירום — תמיד מתקשרים קודם.',
+  },
+  en: {
+    app: 'First Minutes', lang: 'עברית',
+    lead: 'What to do until help arrives. Choose what is happening:',
+    call: n => `Call ${n}`, callfirst: n => `First: call ${n} and put the phone on speaker. The dispatcher will guide you.`,
+    dont: 'Do not', read: '🔊 Read aloud', stop: '⏹ Stop',
+    metroStart: '▶ Start compression beat', metroStop: '⏹ Stop', metroHint: 'Push on the chest with every beep · 110 per minute',
+    swap: '2 minutes passed — if someone else is there, swap now',
+    settings: 'Settings', numLbl: 'Emergency number where you are', custom: 'Other…', save: 'Save',
+    offlineOk: 'This guide is saved on your device and works without internet.',
+    disclaimer: 'Based on widely accepted first-aid guidance (ILCOR / ERC / AHA). It is not a substitute for a first-aid course or medical advice, and it does not replace the dispatcher\'s instructions. In an emergency, always call first.',
+  },
+};
+
+const TOPICS = [
+  { id: 'cpr', ico: '🫀', urgent: true, metro: true,
+    he: { t: 'לא מגיב ולא נושם', s: 'החייאה (עיסויי חזה)',
+      steps: [
+        'ודאו שהמקום בטוח לכם. טלטלו בעדינות את הכתפיים וצעקו: "אתה שומע אותי?"',
+        'אין תגובה? חייגו {n}, הפעילו רמקול, ובקשו ממישהו להביא דפיברילטור (AED) אם יש בסביבה.',
+        'בדקו נשימה עד 10 שניות. לא נושם, או רק חרחורים/נשימות בודדות? מתחילים עיסויים מיד.',
+        'השכיבו על הגב על משטח קשה. הניחו את שורש כף היד במרכז החזה, יד שנייה מעליה, מרפקים ישרים.',
+        'לחצו חזק ומהר: עומק 5–6 ס"מ, קצב 100–120 בדקה. שחררו לגמרי בין לחיצה ללחיצה.',
+        'הגיע דפיברילטור? הפעילו אותו ועשו בדיוק מה שהוא אומר. הוא בטוח לשימוש גם בלי הכשרה.',
+        'לא מפסיקים עד שצוות רפואי מחליף אתכם או שהאדם מתחיל לנשום ולזוז.',
+      ],
+      donts: ['אל תפסיקו כדי "לבדוק דופק".', 'אל תפחדו ללחוץ חזק — צלע שבורה מחלימה, דום לב לא.'],
+      note: 'למדתם הנשמות? 30 עיסויים ואז 2 הנשמות, וחוזר חלילה. לא למדתם — עיסויים בלבד, ברצף. ילד: יד אחת או שתיים, עומק כ-5 ס"מ (שליש מעומק החזה). תינוק: שתי אצבעות או שני אגודלים במרכז החזה, עומק כ-4 ס"מ. אצל ילדים ותינוקות ההנשמות חשובות במיוחד — אם אתם יודעים, פתחו ב-5 הנשמות.' },
+    en: { t: 'Unresponsive, not breathing', s: 'CPR (chest compressions)',
+      steps: [
+        'Make sure the area is safe for you. Shake the shoulders gently and shout: "Can you hear me?"',
+        'No response? Call {n}, turn on speaker, and send someone to fetch a defibrillator (AED) if one is nearby.',
+        'Check breathing for up to 10 seconds. Not breathing, or only gasping? Start compressions now.',
+        'Lay the person on their back on a firm surface. Heel of one hand on the centre of the chest, other hand on top, elbows straight.',
+        'Push hard and fast: 5–6 cm (2–2.4 in) deep, 100–120 per minute. Let the chest rise fully each time.',
+        'AED arrived? Switch it on and do exactly what it says. It is safe to use without training.',
+        'Do not stop until medical help takes over or the person starts breathing and moving.',
+      ],
+      donts: ['Do not stop to "check for a pulse".', 'Do not be afraid to push hard — a broken rib heals, cardiac arrest does not.'],
+      note: 'Trained in rescue breaths? Give 30 compressions, then 2 breaths, and repeat. Not trained — compressions only, without pausing. Child: one or two hands, about 5 cm deep (one third of the chest). Baby: two fingers or two thumbs on the centre of the chest, about 4 cm deep. Breaths matter most for children and babies — if you know how, start with 5 breaths.' } },
+
+  { id: 'choking', ico: '😮', urgent: true,
+    he: { t: 'חנק', s: 'משהו תקוע בגרון',
+      steps: [
+        'שאלו: "אתה נחנק?" אם הוא מצליח להשתעל או לדבר — עודדו אותו להמשיך להשתעל, והישארו לידו.',
+        'לא מצליח לנשום, לדבר או להשתעל? הטו אותו קדימה ותנו 5 מכות חזקות בשורש כף היד בין השכמות.',
+        'לא עזר? עמדו מאחוריו, אגרוף מעל הטבור, יד שנייה מעליו — 5 לחיצות חדות פנימה ולמעלה.',
+        'המשיכו לסירוגין: 5 מכות בגב, 5 לחיצות בבטן. בקשו ממישהו לחייג {n}.',
+        'איבד הכרה? השכיבו בזהירות על הרצפה, חייגו {n} והתחילו עיסויי חזה.',
+      ],
+      donts: ['אל תכניסו אצבעות לפה "לחפש" את הגוף הזר אם אינכם רואים אותו.', 'אל תתנו לשתות.'],
+      note: 'תינוק עד גיל שנה: השכיבו אותו על האמה עם הפנים למטה והראש נמוך מהגוף — 5 מכות בגב; אחר כך הפכו אותו ותנו 5 לחיצות בשתי אצבעות במרכז החזה. לא לוחצים על הבטן של תינוק. אישה בהיריון מתקדם או אדם רחב מאוד: לחיצות על החזה במקום על הבטן. אחרי לחיצות בטן — להיבדק אצל רופא.' },
+    en: { t: 'Choking', s: 'Something stuck in the throat',
+      steps: [
+        'Ask: "Are you choking?" If they can cough or speak, encourage them to keep coughing and stay with them.',
+        'Cannot breathe, speak or cough? Lean them forward and give 5 firm blows between the shoulder blades with the heel of your hand.',
+        'Not cleared? Stand behind, fist just above the navel, other hand over it — 5 sharp thrusts inwards and upwards.',
+        'Keep alternating: 5 back blows, 5 abdominal thrusts. Have someone call {n}.',
+        'If they become unconscious: lower them to the floor, call {n} and start chest compressions.',
+      ],
+      donts: ['Do not sweep the mouth with your fingers unless you can see the object.', 'Do not give anything to drink.'],
+      note: 'Baby under 1 year: lay face down along your forearm, head lower than the body — 5 back blows; then turn over and give 5 chest thrusts with two fingers on the centre of the chest. Never use abdominal thrusts on a baby. Late pregnancy or a very large person: chest thrusts instead of abdominal thrusts. Anyone who received abdominal thrusts should see a doctor afterwards.' } },
+
+  { id: 'bleeding', ico: '🩸', urgent: true,
+    he: { t: 'דימום קשה', s: 'דם שזורם או מתיז',
+      steps: [
+        'לחצו חזק ישירות על הפצע — עם בד נקי, חולצה, או היד (כפפה או שקית אם יש).',
+        'חייגו {n} או בקשו ממישהו לחייג. אל תרפו מהלחץ.',
+        'הבד נספג? אל תסירו אותו — הוסיפו שכבה מעליו והמשיכו ללחוץ.',
+        'דימום מסכן חיים מיד או מרגל, שלא נעצר בלחץ: חסם עורקים (או רצועה רחבה) 5–7 ס"מ מעל הפצע, לא על מפרק. הדקו עד שהדימום נעצר ורשמו את השעה.',
+        'השכיבו את הפצוע, כסו אותו שלא יתקרר, ודברו איתו עד שהעזרה מגיעה.',
+      ],
+      donts: ['אל תוציאו חפץ שנעוץ בפצע — לחצו מסביבו.', 'אל תשחררו חסם עורקים אחרי שהונח.', 'אל תרימו את הבד כדי "לבדוק".'] },
+    en: { t: 'Severe bleeding', s: 'Blood flowing or spurting',
+      steps: [
+        'Press hard directly on the wound — with a clean cloth, a shirt, or your hand (use a glove or plastic bag if available).',
+        'Call {n} or have someone call. Do not release the pressure.',
+        'Cloth soaked through? Do not remove it — add another layer on top and keep pressing.',
+        'Life-threatening bleeding from an arm or leg that pressure does not stop: apply a tourniquet (or a wide strap) 5–7 cm above the wound, not over a joint. Tighten until the bleeding stops and note the time.',
+        'Lay the person down, keep them warm, and keep talking to them until help arrives.',
+      ],
+      donts: ['Do not pull out an object stuck in the wound — press around it.', 'Do not loosen a tourniquet once applied.', 'Do not lift the cloth to "check".'] } },
+
+  { id: 'stroke', ico: '🧠',
+    he: { t: 'חשד לשבץ', s: 'פנים, יד, דיבור',
+      steps: [
+        'פנים: בקשו לחייך. צד אחד של הפה נופל?',
+        'ידיים: בקשו להרים את שתי הידיים. יד אחת צונחת או חלשה?',
+        'דיבור: בקשו לחזור על משפט פשוט. הדיבור משובש, מבולבל או חסר?',
+        'סימן אחד מספיק: חייגו {n} מיד ואמרו "חשד לשבץ". כל דקה חשובה.',
+        'רשמו מתי התחילו הסימנים (או מתי נראה תקין לאחרונה) — הצוות הרפואי יצטרך את זה.',
+        'השכיבו עם הראש מעט מורם והישארו לידו.',
+      ],
+      donts: ['אל תתנו אוכל, שתייה או תרופות (גם לא אספירין).', 'אל תחכו "לראות אם זה עובר" — גם אם הסימנים חלפו.', 'אל תסיעו בעצמכם אם אמבולנס זמין.'],
+      note: 'סימנים נוספים: חולשה או נימול פתאומי בצד אחד של הגוף, אובדן ראייה פתאומי, סחרחורת קשה, כאב ראש פתאומי וחזק מאוד.' },
+    en: { t: 'Suspected stroke', s: 'Face, Arm, Speech, Time',
+      steps: [
+        'Face: ask them to smile. Does one side of the mouth droop?',
+        'Arms: ask them to raise both arms. Does one drift down or feel weak?',
+        'Speech: ask them to repeat a simple sentence. Is it slurred, confused or absent?',
+        'One sign is enough: call {n} now and say "suspected stroke". Every minute counts.',
+        'Note when the signs started (or when the person was last seen well) — the medical team will need it.',
+        'Lay them down with the head slightly raised and stay with them.',
+      ],
+      donts: ['Do not give food, drink or medicine (not even aspirin).', 'Do not wait to "see if it passes" — even if the signs go away.', 'Do not drive them yourself if an ambulance is available.'],
+      note: 'Other signs: sudden weakness or numbness on one side of the body, sudden loss of vision, severe dizziness, a sudden very severe headache.' } },
+
+  { id: 'heart', ico: '💔',
+    he: { t: 'חשד להתקף לב', s: 'כאב או לחץ בחזה',
+      steps: [
+        'סימנים: לחץ או כאב בחזה שלא חולף, כאב שמקרין ליד, לצוואר, ללסת או לגב, קוצר נשימה, זיעה קרה, בחילה. אצל נשים, מבוגרים וחולי סוכרת הסימנים עשויים להיות עמומים יותר.',
+        'חייגו {n} מיד.',
+        'הושיבו במנוחה, בתנוחה נוחה (חצי ישיבה), ושחררו בגדים לוחצים.',
+        'מבוגר שאינו אלרגי לאספירין ואין לו דימום פעיל: ללעוס כדור אספירין אחד (כ-300 מ"ג).',
+        'יש לו תרסיס או כדור ניטרוגליצרין שנרשם לו? עזרו לו לקחת.',
+        'הישארו לידו. אם הוא מאבד הכרה ומפסיק לנשום — התחילו החייאה.',
+      ],
+      donts: ['אל תתנו לו ללכת, לטפס במדרגות או לנהוג.', 'אל תתנו אספירין לילד, או למי שאלרגי לו.'] },
+    en: { t: 'Suspected heart attack', s: 'Chest pain or pressure',
+      steps: [
+        'Signs: chest pressure or pain that does not go away, pain spreading to the arm, neck, jaw or back, shortness of breath, cold sweat, nausea. In women, older people and people with diabetes the signs can be vaguer.',
+        'Call {n} now.',
+        'Sit them down at rest in a comfortable half-sitting position and loosen tight clothing.',
+        'An adult who is not allergic to aspirin and has no active bleeding: chew one aspirin tablet (about 300 mg).',
+        'Do they have prescribed nitroglycerin spray or tablets? Help them take it.',
+        'Stay with them. If they become unresponsive and stop breathing — start CPR.',
+      ],
+      donts: ['Do not let them walk, climb stairs or drive.', 'Do not give aspirin to a child or to anyone allergic to it.'] } },
+
+  { id: 'allergy', ico: '🐝',
+    he: { t: 'תגובה אלרגית קשה', s: 'אנפילקסיס',
+      steps: [
+        'סימנים: נפיחות בפנים, בשפתיים או בלשון, קושי לנשום או צפצופים, פריחה מפושטת, הקאות, חולשה או עילפון — דקות אחרי אוכל, עקיצה או תרופה.',
+        'יש מזרק אפינפרין (אפיפן)? הזריקו מיד לצד החיצוני של הירך, אפשר דרך הבגד. החזיקו במקום לפי ההוראות שעל המזרק.',
+        'חייגו {n} ואמרו "אנפילקסיס" — גם אם יש שיפור.',
+        'השכיבו עם רגליים מורמות. קשה לו לנשום? הושיבו. בהיריון — על צד שמאל.',
+        'אין שיפור אחרי 5 דקות ויש מזרק נוסף? הזריקו שוב, בירך השנייה.',
+      ],
+      donts: ['אל תחכו עם האפינפרין — הזרקה מוקדמת מצילה חיים.', 'אל תעמידו אותו או תתנו לו ללכת, גם אם הוא מרגיש טוב יותר.'] },
+    en: { t: 'Severe allergic reaction', s: 'Anaphylaxis',
+      steps: [
+        'Signs: swelling of the face, lips or tongue, trouble breathing or wheezing, widespread rash, vomiting, weakness or fainting — minutes after food, a sting or a medicine.',
+        'Is there an adrenaline (epinephrine) auto-injector? Use it right away in the outer thigh, through clothing if needed. Hold it in place as written on the device.',
+        'Call {n} and say "anaphylaxis" — even if they improve.',
+        'Lay them down with legs raised. Struggling to breathe? Let them sit up. If pregnant — on the left side.',
+        'No improvement after 5 minutes and a second injector is available? Give it, in the other thigh.',
+      ],
+      donts: ['Do not delay the adrenaline — early injection saves lives.', 'Do not stand them up or let them walk, even if they feel better.'] } },
+
+  { id: 'seizure', ico: '⚡',
+    he: { t: 'פרכוס', s: 'התקף אפילפטי',
+      steps: [
+        'הסתכלו על השעון — כמה זמן זה נמשך?',
+        'הרחיקו חפצים קשים או חדים, והניחו משהו רך מתחת לראש.',
+        'שחררו בגד הדוק סביב הצוואר. תנו לפרכוס לחלוף — הוא נגמר בדרך כלל תוך דקות.',
+        'כשהפרכוס נגמר: הפכו אותו על הצד (תנוחת התאוששות) ובדקו שהוא נושם.',
+        'הישארו לידו ודברו ברוגע עד שהוא חוזר לעצמו. בלבול אחרי התקף הוא רגיל.',
+        'חייגו {n} אם: נמשך יותר מ-5 דקות, התקף חוזר, זה ההתקף הראשון שלו, נפצע, בהיריון, קרה במים, או שאינו מתעורר או נושם כרגיל אחריו.',
+      ],
+      donts: ['אל תכניסו שום דבר לפה — אי אפשר "לבלוע את הלשון".', 'אל תחזיקו אותו בכוח.', 'אל תתנו אוכל או שתייה עד שהוא ער לגמרי.'] },
+    en: { t: 'Seizure', s: 'Convulsions',
+      steps: [
+        'Look at the clock — how long does it last?',
+        'Move hard or sharp objects away and put something soft under the head.',
+        'Loosen anything tight around the neck. Let the seizure run its course — it usually ends within minutes.',
+        'When the shaking stops: roll them onto their side (recovery position) and check they are breathing.',
+        'Stay and speak calmly until they are fully back. Confusion afterwards is normal.',
+        'Call {n} if: it lasts more than 5 minutes, another seizure follows, it is their first one, they are injured, pregnant, it happened in water, or they do not wake up or breathe normally afterwards.',
+      ],
+      donts: ['Do not put anything in the mouth — nobody can "swallow their tongue".', 'Do not hold them down.', 'Do not give food or drink until fully alert.'] } },
+
+  { id: 'burn', ico: '🔥',
+    he: { t: 'כוויה', s: 'חום, מים רותחים, כימיקל',
+      steps: [
+        'הרחיקו ממקור החום. בגד בוער: עצור, השכב, התגלגל.',
+        'קררו מיד במים זורמים פושרים-קרירים במשך 20 דקות. זה עוזר גם אם התחלתם באיחור.',
+        'בזמן הקירור הסירו תכשיטים ובגדים מהאזור — אלא אם הם דבוקים לעור.',
+        'אחרי הקירור כסו בניילון נצמד או בבד נקי שאינו משיר סיבים, בלי להדק.',
+        'שמרו על שאר הגוף חם, במיוחד אצל ילדים.',
+        'חייגו {n} אם: הכוויה גדולה מכף היד של הנפגע, בפנים, בידיים, במפרקים או באיברי המין, עמוקה (עור לבן או חרוך), כימית או חשמלית, או אצל תינוק או קשיש.',
+      ],
+      donts: ['בלי קרח, חמאה, שמן, משחת שיניים או משחות.', 'אל תפוצצו שלפוחיות.', 'אל תקלפו בגד שנדבק לעור.'],
+      note: 'כוויה כימית: שטפו במים זורמים זמן רב ככל האפשר והסירו בגדים מזוהמים. התחשמלות: נתקו את הזרם לפני שנוגעים בנפגע.' },
+    en: { t: 'Burn', s: 'Heat, scalds, chemicals',
+      steps: [
+        'Move away from the heat source. Clothing on fire: stop, drop and roll.',
+        'Cool at once under cool or lukewarm running water for 20 minutes. It helps even if you start late.',
+        'While cooling, remove jewellery and clothing from the area — unless stuck to the skin.',
+        'After cooling, cover loosely with cling film or a clean non-fluffy cloth.',
+        'Keep the rest of the body warm, especially in children.',
+        'Call {n} if: the burn is larger than the injured person\'s hand, on the face, hands, joints or genitals, deep (white or charred skin), chemical or electrical, or in a baby or an elderly person.',
+      ],
+      donts: ['No ice, butter, oil, toothpaste or creams.', 'Do not burst blisters.', 'Do not peel off clothing stuck to the skin.'],
+      note: 'Chemical burn: rinse with running water for as long as possible and remove contaminated clothing. Electric shock: switch off the power before touching the person.' } },
+
+  { id: 'recovery', ico: '🛌',
+    he: { t: 'מחוסר הכרה אבל נושם', s: 'תנוחת התאוששות',
+      steps: [
+        'ודאו שהוא נושם כרגיל: הטו את הראש לאחור, הרימו את הסנטר, והסתכלו על החזה עד 10 שניות.',
+        'כרעו לצידו. את היד הקרובה אליכם הניחו בזווית ישרה, כף היד למעלה.',
+        'את היד הרחוקה הביאו על החזה והצמידו את גב כף היד ללחי הקרובה אליכם.',
+        'קפלו את הברך הרחוקה, ומשכו אותה אליכם כדי לגלגל אותו על הצד.',
+        'הטו מעט את הראש לאחור כדי שדרכי האוויר יישארו פתוחות והפה יפנה מטה.',
+        'חייגו {n}. בדקו נשימה כל דקה. הפסיק לנשום? הפכו על הגב והתחילו החייאה.',
+      ],
+      donts: ['אל תשאירו אותו לבד.', 'אל תתנו אוכל או שתייה.', 'חשד לפגיעה בעמוד השדרה (נפילה, תאונה)? אל תזיזו אלא אם הוא לא יכול לנשום כך או מקיא.'] },
+    en: { t: 'Unconscious but breathing', s: 'Recovery position',
+      steps: [
+        'Confirm normal breathing: tilt the head back, lift the chin, and watch the chest for up to 10 seconds.',
+        'Kneel beside them. Place the arm nearest you at a right angle, palm up.',
+        'Bring the far arm across the chest and hold the back of that hand against the cheek nearest you.',
+        'Bend the far knee and pull it towards you to roll them onto their side.',
+        'Tilt the head back slightly so the airway stays open and the mouth points down.',
+        'Call {n}. Check breathing every minute. Stopped breathing? Roll onto the back and start CPR.',
+      ],
+      donts: ['Do not leave them alone.', 'Do not give food or drink.', 'Possible spinal injury (fall, crash)? Do not move them unless they cannot breathe as they are or are vomiting.'] } },
+
+  { id: 'poison', ico: '☠️',
+    he: { t: 'הרעלה או מנת יתר', s: 'בליעה, שאיפה, תרופות',
+      steps: [
+        'הרחיקו את החומר. גז או עשן? צאו לאוויר צח — בלי לסכן את עצמכם.',
+        'חייגו {n} (או למוקד הרעלות אם יש באזורכם). אמרו מה נלקח, כמה ומתי.',
+        'שמרו את האריזה, הכדורים או שארית החומר והעבירו לצוות הרפואי.',
+        'חומר על העור או בעיניים: שטפו במים זורמים 15–20 דקות.',
+        'מנומנם או מחוסר הכרה אבל נושם? השכיבו על הצד. לא נושם? התחילו החייאה.',
+        'מנת יתר של אופיואידים (נשימה איטית, אישונים זעירים) ויש נלוקסון? תנו לפי ההוראות שעל האריזה.',
+      ],
+      donts: ['אל תגרמו להקאה.', 'אל תתנו חלב, מים או "תרופות סבתא" אלא אם מוקדן הורה לכם.', 'אל תחכו לסימנים — חלק מההרעלות מתבטאות רק אחרי שעות.'] },
+    en: { t: 'Poisoning or overdose', s: 'Swallowed, inhaled, medicines',
+      steps: [
+        'Remove the substance. Gas or smoke? Get to fresh air — without putting yourself in danger.',
+        'Call {n} (or your local poison centre if there is one). Say what was taken, how much and when.',
+        'Keep the packaging, pills or remains of the substance and hand them to the medical team.',
+        'Substance on skin or in the eyes: rinse under running water for 15–20 minutes.',
+        'Drowsy or unconscious but breathing? Lay them on their side. Not breathing? Start CPR.',
+        'Opioid overdose (slow breathing, pinpoint pupils) and naloxone is available? Give it as written on the pack.',
+      ],
+      donts: ['Do not make them vomit.', 'Do not give milk, water or home remedies unless a dispatcher tells you to.', 'Do not wait for symptoms — some poisonings only show after hours.'] } },
+];
+
+/* ---------- state ---------- */
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+};
+const NUMBERS = ['112', '101', '911', '999', '000', '111', '119', '108', '190', '10111'];
+function guessNumber() {
+  let tz = '';
+  try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch {}
+  if (tz === 'Asia/Jerusalem' || tz === 'Asia/Tel_Aviv') return '101';
+  if (tz.startsWith('America/')) return '911';
+  if (tz === 'Europe/London') return '999';
+  if (tz.startsWith('Australia/')) return '000';
+  return '112';
+}
+let lang = store.get('fm.lang') || ((navigator.language || 'en').toLowerCase().startsWith('he') ? 'he' : 'en');
+let num = store.get('fm.num') || guessNumber();
+
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fill = s => esc(s).replaceAll('{n}', `<b dir="ltr">${esc(num)}</b>`);
+
+/* ---------- metronome ---------- */
+const BPM = 110;
+const metro = { ctx: null, timer: null, next: 0, count: 0, t0: 0, lock: null, clock: null };
+function metroBeat() {
+  metro.count++;
+  const p = $('pulse');
+  if (!p) return;
+  p.textContent = ((metro.count - 1) % 30) + 1;
+  p.classList.add('beat');
+  setTimeout(() => p.classList.remove('beat'), 110);
+}
+function metroSchedule() {
+  const c = metro.ctx;
+  while (metro.next < c.currentTime + 0.12) {
+    const o = c.createOscillator(), g = c.createGain();
+    o.frequency.value = 880; o.type = 'square';
+    g.gain.setValueAtTime(0.0001, metro.next);
+    g.gain.exponentialRampToValueAtTime(0.5, metro.next + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.0001, metro.next + 0.08);
+    o.connect(g).connect(c.destination);
+    o.start(metro.next); o.stop(metro.next + 0.1);
+    setTimeout(metroBeat, Math.max(0, (metro.next - c.currentTime) * 1000));
+    metro.next += 60 / BPM;
+  }
+}
+function metroClock() {
+  const s = Math.floor((Date.now() - metro.t0) / 1000);
+  const t = $('mtime'), sw = $('swap');
+  if (t) t.textContent = `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+  if (sw) sw.hidden = !(s >= 120 && s % 120 < 12);
+}
+async function metroStart() {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (AC) {
+    metro.ctx = metro.ctx || new AC();
+    await metro.ctx.resume();
+    metro.next = metro.ctx.currentTime + 0.1;
+    metro.timer = setInterval(metroSchedule, 25);
+  } else {
+    metro.timer = setInterval(metroBeat, 60000 / BPM); // visual-only fallback
+  }
+  metro.count = 0; metro.t0 = Date.now();
+  metro.clock = setInterval(metroClock, 500);
+  try { metro.lock = await navigator.wakeLock?.request('screen'); } catch {}
+  $('mbtn').textContent = UI[lang].metroStop;
+}
+function metroStop() {
+  clearInterval(metro.timer); clearInterval(metro.clock);
+  metro.timer = metro.clock = null;
+  try { metro.lock?.release(); } catch {}
+  metro.lock = null;
+  const b = $('mbtn'); if (b) b.textContent = UI[lang].metroStart;
+}
+
+/* ---------- read aloud ---------- */
+const canSpeak = 'speechSynthesis' in window;
+function speakStop() { if (canSpeak) speechSynthesis.cancel(); }
+function speak(topic) {
+  const d = topic[lang];
+  const u = new SpeechSynthesisUtterance(
+    [d.t, ...d.steps.map((s, i) => `${i + 1}. ${s.replaceAll('{n}', num.split('').join(' '))}`)].join('. '));
+  u.lang = lang === 'he' ? 'he-IL' : 'en-US'; u.rate = 0.95;
+  u.onend = u.onerror = () => { const b = $('readBtn'); if (b) b.textContent = UI[lang].read; };
+  speechSynthesis.speak(u);
+}
+
+/* ---------- render ---------- */
+function renderHome() {
+  const u = UI[lang];
+  return `<p class="lead">${u.lead}</p>
+  <div class="grid">${TOPICS.map(t => `
+    <a class="tile${t.urgent ? ' urgent' : ''}" href="#/${t.id}">
+      <span class="ico" aria-hidden="true">${t.ico}</span><b>${esc(t[lang].t)}</b><span>${esc(t[lang].s)}</span>
+    </a>`).join('')}</div>
+  <footer><p>${u.offlineOk}</p><p>${u.disclaimer}</p></footer>`;
+}
+function renderTopic(t) {
+  const u = UI[lang], d = t[lang];
+  return `<h2><span aria-hidden="true">${t.ico}</span> ${esc(d.t)}</h2>
+  <div class="callfirst">${fill(u.callfirst('{n}'))}</div>
+  ${t.metro ? `<div class="metro">
+      <div class="pulse" id="pulse" aria-hidden="true">♥</div>
+      <button class="btn primary" id="mbtn" type="button">${u.metroStart}</button>
+      <div class="time"><span id="mtime">00:00</span> · ${u.metroHint}</div>
+      <div class="swap" id="swap" hidden>${u.swap}</div>
+    </div>` : ''}
+  ${canSpeak ? `<div class="row"><button class="btn" id="readBtn" type="button">${u.read}</button></div>` : ''}
+  <ol class="steps">${d.steps.map(s => `<li><span>${fill(s)}</span></li>`).join('')}</ol>
+  ${d.donts ? `<div class="dont"><h3>⛔ ${u.dont}</h3><ul class="plain">${d.donts.map(s => `<li>${fill(s)}</li>`).join('')}</ul></div>` : ''}
+  ${d.note ? `<p class="note">${fill(d.note)}</p>` : ''}
+  <footer><p>${u.disclaimer}</p></footer>`;
+}
+function render() {
+  metroStop(); speakStop();
+  const u = UI[lang];
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
+  const id = location.hash.replace(/^#\/?/, '');
+  const topic = TOPICS.find(t => t.id === id);
+  document.title = topic ? `${topic[lang].t} · ${u.app}` : u.app;
+  $('appname').textContent = u.app;
+  $('langBtn').textContent = u.lang;
+  $('back').hidden = !topic;
+  $('back').textContent = lang === 'he' ? '→' : '←';
+  $('call').innerHTML = `<span aria-hidden="true">📞</span> ${esc(u.call(num))}`;
+  $('call').href = 'tel:' + num.replace(/[^0-9+*#]/g, '');
+  $('view').innerHTML = topic ? renderTopic(topic) : renderHome();
+  if (topic) {
+    $('mbtn')?.addEventListener('click', () => (metro.timer ? metroStop() : metroStart()));
+    $('readBtn')?.addEventListener('click', e => {
+      if (speechSynthesis.speaking) { speakStop(); e.target.textContent = u.read; }
+      else { speak(topic); e.target.textContent = u.stop; }
+    });
+  }
+  window.scrollTo(0, 0);
+}
+
+/* ---------- settings ---------- */
+function openSettings() {
+  const u = UI[lang], sel = $('numSel'), cus = $('numCustom');
+  $('setTitle').textContent = u.settings; $('numLbl').textContent = u.numLbl; $('setSave').textContent = u.save;
+  sel.innerHTML = NUMBERS.map(n => `<option>${n}</option>`).join('') + `<option value="custom">${u.custom}</option>`;
+  const known = NUMBERS.includes(num);
+  sel.value = known ? num : 'custom'; cus.hidden = known; cus.required = !known; cus.value = known ? '' : num;
+  $('settings').showModal();
+}
+$('numSel').addEventListener('change', e => {
+  const c = e.target.value === 'custom';
+  $('numCustom').hidden = !c; $('numCustom').required = c;
+  if (c) $('numCustom').focus();
+});
+$('settings').addEventListener('close', () => {
+  if ($('settings').returnValue !== 'ok') return;
+  const v = $('numSel').value === 'custom' ? $('numCustom').value.trim() : $('numSel').value;
+  if (v) { num = v; store.set('fm.num', num); render(); }
+});
+$('setBtn').addEventListener('click', openSettings);
+$('langBtn').addEventListener('click', () => { lang = lang === 'he' ? 'en' : 'he'; store.set('fm.lang', lang); render(); });
+window.addEventListener('hashchange', render);
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible' && metro.timer && !metro.lock) {
+    try { metro.lock = await navigator.wakeLock?.request('screen'); } catch {}
+  }
+});
+render();
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
