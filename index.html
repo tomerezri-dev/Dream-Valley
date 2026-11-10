@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#b3261e">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-180.png">
 <style>
 :root {
   --bg: #fbf8f6; --surface: #ffffff; --text: #1d1b1a; --muted: #5f5955;
@@ -171,26 +171,26 @@ const TOPICS = [
       steps: [
         'ודאו שהמקום בטוח לכם. טלטלו בעדינות את הכתפיים וצעקו: "אתה שומע אותי?"',
         'אין תגובה? חייגו {n}, הפעילו רמקול, ובקשו ממישהו להביא דפיברילטור (AED) אם יש בסביבה.',
-        'בדקו נשימה עד 10 שניות. לא נושם, או רק חרחורים/נשימות בודדות? מתחילים עיסויים מיד.',
+        'הטו את הראש לאחור, הרימו את הסנטר ובדקו נשימה עד 10 שניות. לא נושם, או רק חרחורים/נשימות בודדות? מתחילים עיסויים מיד.',
         'השכיבו על הגב על משטח קשה. הניחו את שורש כף היד במרכז החזה, יד שנייה מעליה, מרפקים ישרים.',
         'לחצו חזק ומהר: עומק 5–6 ס"מ, קצב 100–120 בדקה. שחררו לגמרי בין לחיצה ללחיצה.',
         'הגיע דפיברילטור? הפעילו אותו ועשו בדיוק מה שהוא אומר. הוא בטוח לשימוש גם בלי הכשרה.',
         'לא מפסיקים עד שצוות רפואי מחליף אתכם או שהאדם מתחיל לנשום ולזוז.',
       ],
       donts: ['אל תפסיקו כדי "לבדוק דופק".', 'אל תפחדו ללחוץ חזק — צלע שבורה מחלימה, דום לב לא.'],
-      note: 'למדתם הנשמות? 30 עיסויים ואז 2 הנשמות, וחוזר חלילה. לא למדתם — עיסויים בלבד, ברצף. ילד: יד אחת או שתיים, עומק כ-5 ס"מ (שליש מעומק החזה). תינוק: שתי אצבעות או שני אגודלים במרכז החזה, עומק כ-4 ס"מ. אצל ילדים ותינוקות ההנשמות חשובות במיוחד — אם אתם יודעים, פתחו ב-5 הנשמות.' },
+      note: 'למדתם הנשמות? 30 עיסויים ואז 2 הנשמות, וחוזר חלילה. לא למדתם — עיסויים בלבד, ברצף. ילד: יד אחת או שתיים, עומק כ-5 ס"מ (שליש מעומק החזה). תינוק: שני אגודלים במרכז החזה כשהידיים עוטפות את בית החזה, או שורש כף יד אחת; עומק כ-4 ס"מ. לא לוחצים בשתי אצבעות — זה לא מגיע לעומק הנדרש. אצל ילדים ותינוקות ההנשמות חשובות במיוחד — אם אתם יודעים, פתחו ב-5 הנשמות.' },
     en: { t: 'Unresponsive, not breathing', s: 'CPR (chest compressions)',
       steps: [
         'Make sure the area is safe for you. Shake the shoulders gently and shout: "Can you hear me?"',
         'No response? Call {n}, turn on speaker, and send someone to fetch a defibrillator (AED) if one is nearby.',
-        'Check breathing for up to 10 seconds. Not breathing, or only gasping? Start compressions now.',
+        'Tilt the head back, lift the chin and check breathing for up to 10 seconds. Not breathing, or only gasping? Start compressions now.',
         'Lay the person on their back on a firm surface. Heel of one hand on the centre of the chest, other hand on top, elbows straight.',
         'Push hard and fast: 5–6 cm (2–2.4 in) deep, 100–120 per minute. Let the chest rise fully each time.',
         'AED arrived? Switch it on and do exactly what it says. It is safe to use without training.',
         'Do not stop until medical help takes over or the person starts breathing and moving.',
       ],
       donts: ['Do not stop to "check for a pulse".', 'Do not be afraid to push hard — a broken rib heals, cardiac arrest does not.'],
-      note: 'Trained in rescue breaths? Give 30 compressions, then 2 breaths, and repeat. Not trained — compressions only, without pausing. Child: one or two hands, about 5 cm deep (one third of the chest). Baby: two fingers or two thumbs on the centre of the chest, about 4 cm deep. Breaths matter most for children and babies — if you know how, start with 5 breaths.' } },
+      note: 'Trained in rescue breaths? Give 30 compressions, then 2 breaths, and repeat. Not trained — compressions only, without pausing. Child: one or two hands, about 5 cm deep (one third of the chest). Baby: two thumbs on the centre of the chest with your hands encircling it, or the heel of one hand; about 4 cm deep. Do not use two fingers — they do not push deep enough. Breaths matter most for children and babies — if you know how, start with 5 breaths.' } },
 
   { id: 'choking', ico: '😮', urgent: true,
     he: { t: 'חנק', s: 'משהו תקוע בגרון',
@@ -202,7 +202,7 @@ const TOPICS = [
         'איבד הכרה? השכיבו בזהירות על הרצפה, חייגו {n} והתחילו עיסויי חזה.',
       ],
       donts: ['אל תכניסו אצבעות לפה "לחפש" את הגוף הזר אם אינכם רואים אותו.', 'אל תתנו לשתות.'],
-      note: 'תינוק עד גיל שנה: השכיבו אותו על האמה עם הפנים למטה והראש נמוך מהגוף — 5 מכות בגב; אחר כך הפכו אותו ותנו 5 לחיצות בשתי אצבעות במרכז החזה. לא לוחצים על הבטן של תינוק. אישה בהיריון מתקדם או אדם רחב מאוד: לחיצות על החזה במקום על הבטן. אחרי לחיצות בטן — להיבדק אצל רופא.' },
+      note: 'תינוק עד גיל שנה: השכיבו אותו על האמה עם הפנים למטה והראש נמוך מהגוף — 5 מכות בגב; אחר כך הפכו אותו על הגב ותנו 5 לחיצות חדות במרכז החזה בשורש כף יד אחת. חזרו לסירוגין עד שהגוף הזר יוצא. לא לוחצים על הבטן של תינוק. אישה בהיריון מתקדם או אדם רחב מאוד: לחיצות על החזה במקום על הבטן. אחרי לחיצות בטן — להיבדק אצל רופא.' },
     en: { t: 'Choking', s: 'Something stuck in the throat',
       steps: [
         'Ask: "Are you choking?" If they can cough or speak, encourage them to keep coughing and stay with them.',
@@ -212,7 +212,7 @@ const TOPICS = [
         'If they become unconscious: lower them to the floor, call {n} and start chest compressions.',
       ],
       donts: ['Do not sweep the mouth with your fingers unless you can see the object.', 'Do not give anything to drink.'],
-      note: 'Baby under 1 year: lay face down along your forearm, head lower than the body — 5 back blows; then turn over and give 5 chest thrusts with two fingers on the centre of the chest. Never use abdominal thrusts on a baby. Late pregnancy or a very large person: chest thrusts instead of abdominal thrusts. Anyone who received abdominal thrusts should see a doctor afterwards.' } },
+      note: 'Baby under 1 year: lay face down along your forearm, head lower than the body — 5 back blows; then turn onto the back and give 5 sharp chest thrusts on the centre of the chest with the heel of one hand. Keep alternating until the object comes out. Never use abdominal thrusts on a baby. Late pregnancy or a very large person: chest thrusts instead of abdominal thrusts. Anyone who received abdominal thrusts should see a doctor afterwards.' } },
 
   { id: 'bleeding', ico: '🩸', urgent: true,
     he: { t: 'דימום קשה', s: 'דם שזורם או מתיז',
@@ -264,7 +264,7 @@ const TOPICS = [
         'סימנים: לחץ או כאב בחזה שלא חולף, כאב שמקרין ליד, לצוואר, ללסת או לגב, קוצר נשימה, זיעה קרה, בחילה. אצל נשים, מבוגרים וחולי סוכרת הסימנים עשויים להיות עמומים יותר.',
         'חייגו {n} מיד.',
         'הושיבו במנוחה, בתנוחה נוחה (חצי ישיבה), ושחררו בגדים לוחצים.',
-        'מבוגר שאינו אלרגי לאספירין ואין לו דימום פעיל: ללעוס כדור אספירין אחד (כ-300 מ"ג).',
+        'מבוגר בהכרה שאינו אלרגי לאספירין ואין לו דימום פעיל: ללעוס ולבלוע אספירין במינון 160–325 מ"ג (למשל 3 כדורים של 100 מ"ג).',
         'יש לו תרסיס או כדור ניטרוגליצרין שנרשם לו? עזרו לו לקחת.',
         'הישארו לידו. אם הוא מאבד הכרה ומפסיק לנשום — התחילו החייאה.',
       ],
@@ -274,7 +274,7 @@ const TOPICS = [
         'Signs: chest pressure or pain that does not go away, pain spreading to the arm, neck, jaw or back, shortness of breath, cold sweat, nausea. In women, older people and people with diabetes the signs can be vaguer.',
         'Call {n} now.',
         'Sit them down at rest in a comfortable half-sitting position and loosen tight clothing.',
-        'An adult who is not allergic to aspirin and has no active bleeding: chew one aspirin tablet (about 300 mg).',
+        'An alert adult who is not allergic to aspirin and has no active bleeding: chew and swallow 160–325 mg of aspirin (for example one 300 mg tablet, or 2–4 low-dose tablets).',
         'Do they have prescribed nitroglycerin spray or tablets? Help them take it.',
         'Stay with them. If they become unresponsive and stop breathing — start CPR.',
       ],
@@ -328,23 +328,23 @@ const TOPICS = [
         'הרחיקו ממקור החום. בגד בוער: עצור, השכב, התגלגל.',
         'קררו מיד במים זורמים פושרים-קרירים במשך 20 דקות. זה עוזר גם אם התחלתם באיחור.',
         'בזמן הקירור הסירו תכשיטים ובגדים מהאזור — אלא אם הם דבוקים לעור.',
-        'אחרי הקירור כסו בניילון נצמד או בבד נקי שאינו משיר סיבים, בלי להדק.',
+        'אחרי הקירור הניחו על הכוויה ניילון נצמד (לא על הפנים, ולא כרוך סביב גפה) או בד נקי שאינו משיר סיבים, בלי להדק.',
         'שמרו על שאר הגוף חם, במיוחד אצל ילדים.',
         'חייגו {n} אם: הכוויה גדולה מכף היד של הנפגע, בפנים, בידיים, במפרקים או באיברי המין, עמוקה (עור לבן או חרוך), כימית או חשמלית, או אצל תינוק או קשיש.',
       ],
       donts: ['בלי קרח, חמאה, שמן, משחת שיניים או משחות.', 'אל תפוצצו שלפוחיות.', 'אל תקלפו בגד שנדבק לעור.'],
-      note: 'כוויה כימית: שטפו במים זורמים זמן רב ככל האפשר והסירו בגדים מזוהמים. התחשמלות: נתקו את הזרם לפני שנוגעים בנפגע.' },
+      note: 'כוויה כימית: אבקה יבשה מברישים קודם מהעור (לא ביד חשופה), ואז שוטפים במים זורמים לפחות 20 דקות ומסירים בגדים מזוהמים. התחשמלות: נתקו את הזרם לפני שנוגעים בנפגע.' },
     en: { t: 'Burn', s: 'Heat, scalds, chemicals',
       steps: [
         'Move away from the heat source. Clothing on fire: stop, drop and roll.',
         'Cool at once under cool or lukewarm running water for 20 minutes. It helps even if you start late.',
         'While cooling, remove jewellery and clothing from the area — unless stuck to the skin.',
-        'After cooling, cover loosely with cling film or a clean non-fluffy cloth.',
+        'After cooling, lay cling film over the burn (not on the face, and not wrapped around a limb) or cover loosely with a clean non-fluffy cloth.',
         'Keep the rest of the body warm, especially in children.',
         'Call {n} if: the burn is larger than the injured person\'s hand, on the face, hands, joints or genitals, deep (white or charred skin), chemical or electrical, or in a baby or an elderly person.',
       ],
       donts: ['No ice, butter, oil, toothpaste or creams.', 'Do not burst blisters.', 'Do not peel off clothing stuck to the skin.'],
-      note: 'Chemical burn: rinse with running water for as long as possible and remove contaminated clothing. Electric shock: switch off the power before touching the person.' } },
+      note: 'Chemical burn: brush dry powder off the skin first (not with a bare hand), then rinse under running water for at least 20 minutes and remove contaminated clothing. Electric shock: switch off the power before touching the person.' } },
 
   { id: 'recovery', ico: '🛌',
     he: { t: 'מחוסר הכרה אבל נושם', s: 'תנוחת התאוששות',
@@ -537,6 +537,7 @@ function openSettings() {
   sel.innerHTML = NUMBERS.map(n => `<option>${n}</option>`).join('') + `<option value="custom">${u.custom}</option>`;
   const known = NUMBERS.includes(num);
   sel.value = known ? num : 'custom'; cus.hidden = known; cus.required = !known; cus.value = known ? '' : num;
+  $('settings').returnValue = '';
   $('settings').showModal();
 }
 $('numSel').addEventListener('change', e => {

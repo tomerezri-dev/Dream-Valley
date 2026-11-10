@@ -36,7 +36,8 @@ To publish, enable GitHub Pages for this repository (Settings → Pages → depl
 ## Content and disclaimer
 
 The instructions follow widely accepted lay-rescuer guidance (ILCOR, European Resuscitation
-Council, American Heart Association, Red Cross). They have **not** been reviewed by a medical
+Council, American Heart Association, Red Cross), including the 2025 updates (for example,
+no two-finger compressions for infants). They have **not** been reviewed by a medical
 professional for this project. This is not a substitute for a first-aid course, for medical
 advice, or for the instructions of an emergency dispatcher. In an emergency, always call first.
 
