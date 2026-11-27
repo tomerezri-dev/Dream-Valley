@@ -1,0 +1,77 @@
+name: Build Inkwell desktop app
+
+on:
+  push:
+    paths:
+      - 'inkwell/**'
+      - '.github/workflows/inkwell-desktop.yml'
+    tags:
+      - 'inkwell-v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: --win
+            name: windows
+          - os: macos-latest
+            target: --mac
+            name: macos
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: inkwell
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: inkwell/package-lock.json
+
+      - run: npm ci
+      - run: npm test
+
+      # Signs the app if you add certificate secrets; otherwise macOS gets an
+      # ad-hoc signature and Windows is unsigned.
+      - name: Build installers
+        shell: bash
+        env:
+          CSC_LINK: ${{ matrix.name == 'macos' && secrets.MAC_CSC_LINK || secrets.WIN_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ matrix.name == 'macos' && secrets.MAC_CSC_KEY_PASSWORD || secrets.WIN_CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          EXTRA=""
+          if [ -z "$CSC_LINK" ]; then
+            export CSC_IDENTITY_AUTO_DISCOVERY=false
+            unset CSC_LINK CSC_KEY_PASSWORD
+            if [ "${{ matrix.name }}" = "macos" ]; then EXTRA="-c.mac.identity=- -c.mac.notarize=false"; fi
+          fi
+          npx electron-builder ${{ matrix.target }} --publish never $EXTRA
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Inkwell-${{ matrix.name }}
+          path: |
+            inkwell/dist/*.exe
+            inkwell/dist/*.dmg
+            inkwell/dist/*-mac.zip
+          if-no-files-found: error
+
+      - name: Attach to GitHub release
+        if: startsWith(github.ref, 'refs/tags/inkwell-v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            inkwell/dist/*.exe
+            inkwell/dist/*.dmg
