@@ -1,5 +1,5 @@
 // App shell is cached for offline start; transit data and map tiles always come from the network.
-const CACHE = 'kav-v1';
+const CACHE = 'kav-v2';
 const ASSETS = ['./', 'index.html', 'app.js', 'manifest.webmanifest', 'icon.svg', 'icon-180.png', 'icon-192.png', 'icon-512.png', 'vendor/leaflet.js', 'vendor/leaflet.css'];
 
 self.addEventListener('install', e => {

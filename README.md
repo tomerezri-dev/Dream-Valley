@@ -74,4 +74,4 @@ community-run [MOTIS](https://github.com/motis-project/motis) server built on op
 (including Israel's Ministry of Transport feed) and OpenStreetMap. No API key is needed.
 Transitous is a volunteer-run service; check its usage terms on
 [transitous.org](https://transitous.org) before publishing the app widely.
-Map tiles: © OpenStreetMap contributors, © CARTO. Map library: Leaflet 1.9.4 (vendored in `transit/vendor/`).
+Map tiles: © OpenStreetMap contributors. Map library: Leaflet 1.9.4 (vendored in `transit/vendor/`).
