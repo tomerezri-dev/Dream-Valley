@@ -1,4 +1,5 @@
 Pillow>=10.1
 mss>=9.0
-pystray>=0.19
+pystray>=0.19; sys_platform != "darwin"
 pynput>=1.7; sys_platform != "win32"
+pyobjc-framework-Quartz>=10; sys_platform == "darwin"

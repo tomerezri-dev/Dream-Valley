@@ -1,0 +1,62 @@
+name: Build ShotMark
+
+on:
+  push:
+    paths: ["shotmark/**", ".github/workflows/shotmark-build.yml"]
+  pull_request:
+    paths: ["shotmark/**", ".github/workflows/shotmark-build.yml"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r shotmark/requirements.txt pyinstaller
+      - name: Smoke test Windows integration
+        working-directory: shotmark
+        run: |
+          python -c "import platform_utils as p; p.enable_dpi_awareness(); print('windows:', p.visible_windows()[:3]); print('hotkey:', p.parse_hotkey('Ctrl+PrintScreen')); from PIL import Image; print('clipboard:', p.copy_image_to_clipboard(Image.new('RGB', (8, 8), 'red')))"
+          python -c "import capture; img, origin = capture.grab_virtual_screen(); print('screen:', img.size, origin)"
+          python -c "import app, annotations, editor, recorder, effects; print('imports ok')"
+      - name: Build exe
+        working-directory: shotmark
+        run: pyinstaller --noconfirm --onefile --windowed --name ShotMark --icon icon.ico main.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ShotMark-windows
+          path: shotmark/dist/ShotMark.exe
+
+  build-mac:
+    runs-on: macos-latest   # Apple Silicon
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r shotmark/requirements.txt pyinstaller
+      - name: Smoke test macOS integration
+        working-directory: shotmark
+        run: |
+          python -c "import tkinter; print('tk', tkinter.TkVersion)"
+          python -c "import platform_utils as p; print('windows:', p.visible_windows()[:3]); print('hotkey:', p.parse_mac_hotkey('Cmd+Shift+2')); from PIL import Image; print('clipboard:', p.copy_image_to_clipboard(Image.new('RGB', (8, 8), 'red'))); print('input trusted:', p.mac_input_trusted())"
+          python -c "import capture; img, origin, size = capture.grab_virtual_screen_info(); print('screen pixels:', img.size, 'points:', size, 'origin:', origin)"
+          python -c "import app, annotations, editor, recorder, effects; print('imports ok')"
+      - name: Build app
+        working-directory: shotmark
+        run: |
+          pyinstaller --noconfirm --windowed --name ShotMark --icon icon.icns --osx-bundle-identifier com.shotmark.app main.py
+          ditto -c -k --keepParent dist/ShotMark.app dist/ShotMark-mac.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ShotMark-mac
+          path: shotmark/dist/ShotMark-mac.zip

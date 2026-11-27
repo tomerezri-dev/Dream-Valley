@@ -9,6 +9,8 @@ APP_NAME = "ShotMark"
 def _config_dir():
     if sys.platform == "win32":
         base = os.environ.get("APPDATA") or os.path.expanduser("~")
+    elif sys.platform == "darwin":
+        base = os.path.expanduser("~/Library/Application Support")
     else:
         base = os.environ.get("XDG_CONFIG_HOME") or os.path.expanduser("~/.config")
     return os.path.join(base, APP_NAME)
@@ -24,9 +26,10 @@ DEFAULTS = {
     "auto_save": True,
     "copy_to_clipboard": True,
     "image_format": "png",          # png or jpg
-    "hotkey_region": "PrintScreen",
-    "hotkey_fullscreen": "Ctrl+PrintScreen",
-    "hotkey_record": "Shift+PrintScreen",
+    # Macs have no Print Screen key, and Cmd+Shift+3/4/5 belong to macOS.
+    "hotkey_region": "Cmd+Shift+2" if sys.platform == "darwin" else "PrintScreen",
+    "hotkey_fullscreen": "Cmd+Shift+1" if sys.platform == "darwin" else "Ctrl+PrintScreen",
+    "hotkey_record": "Cmd+Shift+8" if sys.platform == "darwin" else "Shift+PrintScreen",
     "delay_seconds": 3,
     "gif_fps": 10,
     "gif_max_seconds": 60,

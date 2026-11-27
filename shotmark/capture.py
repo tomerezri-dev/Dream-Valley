@@ -15,11 +15,21 @@ def _mss():
 
 def grab_virtual_screen():
     """Capture every monitor. Returns (image, (left, top)) of the virtual desktop."""
+    img, origin, _ = grab_virtual_screen_info()
+    return img, origin
+
+
+def grab_virtual_screen_info():
+    """Like grab_virtual_screen, plus the desktop size in screen coordinates.
+
+    On a Retina Mac the image is larger than the desktop in points (usually 2x);
+    on Windows (DPI-aware) and Linux both sizes are the same.
+    """
     with _mss() as sct:
         mon = sct.monitors[0]
         shot = sct.grab(mon)
         img = Image.frombytes("RGB", shot.size, shot.bgra, "raw", "BGRX")
-        return img, (mon["left"], mon["top"])
+        return img, (mon["left"], mon["top"]), (mon["width"], mon["height"])
 
 
 def grab_box(left, top, width, height):
@@ -84,6 +94,8 @@ class RegionSelector:
         c.bind("<B1-Motion>", self._drag)
         c.bind("<ButtonRelease-1>", self._release)
         c.bind("<Button-3>", lambda e: self._finish(None))
+        if platform_utils.IS_MAC:
+            c.bind("<Button-2>", lambda e: self._finish(None))  # right-click on macOS
         self.win.bind("<Escape>", lambda e: self._finish(None))
         self.win.bind("<Return>", lambda e: self._finish((0, 0, w, h)))
         self.win.after(10, self._grab_focus)
@@ -235,13 +247,18 @@ def select_region(root, on_done, title="Drag to select an area", snap_windows=Tr
     on_done(image_or_None, desktop_box_or_None)
     """
     windows = platform_utils.visible_windows() if snap_windows else []
-    shot, origin = grab_virtual_screen()
+    shot, origin, (lw, lh) = grab_virtual_screen_info()
+    # The overlay works in screen coordinates; on Retina the shot has more pixels.
+    sx, sy = shot.width / max(1, lw), shot.height / max(1, lh)
+    scaled = abs(sx - 1) > 0.01 or abs(sy - 1) > 0.01
+    view = shot.resize((lw, lh), Image.LANCZOS) if scaled else shot
 
     def done(box):
         if box is None:
             on_done(None, None)
-        else:
-            x0, y0, x1, y1 = box
-            on_done(shot.crop(box), (x0 + origin[0], y0 + origin[1], x1 + origin[0], y1 + origin[1]))
+            return
+        x0, y0, x1, y1 = box
+        pixel_box = (round(x0 * sx), round(y0 * sy), round(x1 * sx), round(y1 * sy)) if scaled else box
+        on_done(shot.crop(pixel_box), (x0 + origin[0], y0 + origin[1], x1 + origin[0], y1 + origin[1]))
 
-    RegionSelector(root, shot, origin, done, windows, title)
+    RegionSelector(root, view, origin, done, windows, title)

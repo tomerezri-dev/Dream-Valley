@@ -1,6 +1,7 @@
 """The image editor canvas: tools, selection, undo/redo, zoom."""
 from __future__ import annotations
 
+import sys
 import tkinter as tk
 from tkinter import ttk
 
@@ -68,6 +69,7 @@ class Editor(ttk.Frame):
         c.bind("<ButtonRelease-1>", self._release)
         c.bind("<Double-Button-1>", self._double)
         c.bind("<Control-MouseWheel>", self._wheel_zoom)
+        c.bind("<Command-MouseWheel>" if sys.platform == "darwin" else "<Alt-MouseWheel>", self._wheel_zoom)
         c.bind("<MouseWheel>", lambda e: c.yview_scroll(-1 if e.delta > 0 else 1, "units"))
         c.bind("<Shift-MouseWheel>", lambda e: c.xview_scroll(-1 if e.delta > 0 else 1, "units"))
         c.bind("<Control-Button-4>", lambda e: self.zoom_by(1.25))

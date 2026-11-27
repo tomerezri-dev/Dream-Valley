@@ -19,6 +19,10 @@ import recorder
 from editor import TOOLS, Editor
 from settings import APP_NAME, Settings
 
+IS_MAC = platform_utils.IS_MAC
+MOD = "Command" if IS_MAC else "Control"   # Tk event modifier for shortcuts
+MODL = "⌘" if IS_MAC else "Ctrl+"          # how shortcuts are shown in menus
+
 SWATCHES = ["#e53935", "#fb8c00", "#fdd835", "#43a047", "#1e88e5", "#8e24aa", "#000000", "#ffffff"]
 WIDTHS = [2, 4, 6, 10]
 FONT_SIZES = [16, 20, 28, 36, 48, 64]
@@ -81,16 +85,16 @@ class App:
     def _build_menu(self):
         m = tk.Menu(self.root)
         f = tk.Menu(m, tearoff=False)
-        f.add_command(label="Capture region / window", accelerator="Ctrl+N", command=self.capture_region)
+        f.add_command(label="Capture region / window", accelerator=MODL + "N", command=self.capture_region)
         f.add_command(label="Capture full screen", command=self.capture_fullscreen)
         f.add_command(label="Delayed capture", command=self.capture_delayed)
         f.add_command(label="Record GIF", command=self.record_gif)
         f.add_separator()
-        f.add_command(label="Open…", accelerator="Ctrl+O", command=self.open_file)
-        f.add_command(label="Paste image", accelerator="Ctrl+V", command=self.paste)
-        f.add_command(label="Save", accelerator="Ctrl+S", command=self.save)
-        f.add_command(label="Save as…", accelerator="Ctrl+Shift+S", command=self.save_as)
-        f.add_command(label="Copy to clipboard", accelerator="Ctrl+C", command=self.copy)
+        f.add_command(label="Open…", accelerator=MODL + "O", command=self.open_file)
+        f.add_command(label="Paste image", accelerator=MODL + "V", command=self.paste)
+        f.add_command(label="Save", accelerator=MODL + "S", command=self.save)
+        f.add_command(label="Save as…", accelerator=MODL + "Shift+S", command=self.save_as)
+        f.add_command(label="Copy to clipboard", accelerator=MODL + "C", command=self.copy)
         f.add_separator()
         f.add_command(label="Open captures folder", command=self.open_folder)
         f.add_command(label="Settings…", command=self.open_settings)
@@ -99,8 +103,8 @@ class App:
         m.add_cascade(label="File", menu=f)
 
         e = tk.Menu(m, tearoff=False)
-        e.add_command(label="Undo", accelerator="Ctrl+Z", command=lambda: self.editor.undo())
-        e.add_command(label="Redo", accelerator="Ctrl+Y", command=lambda: self.editor.redo())
+        e.add_command(label="Undo", accelerator=MODL + "Z", command=lambda: self.editor.undo())
+        e.add_command(label="Redo", accelerator=MODL + "Y", command=lambda: self.editor.redo())
         e.add_command(label="Delete selected", accelerator="Del", command=lambda: self.editor.delete_selected())
         m.add_cascade(label="Edit", menu=e)
 
@@ -117,10 +121,10 @@ class App:
         m.add_cascade(label="Image", menu=im)
 
         v = tk.Menu(m, tearoff=False)
-        v.add_command(label="Zoom in", accelerator="Ctrl++", command=lambda: self.editor.zoom_by(1.25))
-        v.add_command(label="Zoom out", accelerator="Ctrl+-", command=lambda: self.editor.zoom_by(0.8))
-        v.add_command(label="Actual size", accelerator="Ctrl+0", command=lambda: self.editor.set_zoom(1.0))
-        v.add_command(label="Fit to window", accelerator="Ctrl+9", command=lambda: self.editor.set_zoom(None))
+        v.add_command(label="Zoom in", accelerator=MODL + "+", command=lambda: self.editor.zoom_by(1.25))
+        v.add_command(label="Zoom out", accelerator=MODL + "-", command=lambda: self.editor.zoom_by(0.8))
+        v.add_command(label="Actual size", accelerator=MODL + "0", command=lambda: self.editor.set_zoom(1.0))
+        v.add_command(label="Fit to window", accelerator=MODL + "9", command=lambda: self.editor.set_zoom(None))
         m.add_cascade(label="View", menu=v)
 
         hl = tk.Menu(m, tearoff=False)
@@ -220,21 +224,21 @@ class App:
                 return "break"
             return h
 
-        r.bind("<Control-n>", lambda e: self.capture_region())
-        r.bind("<Control-o>", lambda e: self.open_file())
-        r.bind("<Control-s>", lambda e: self.save())
-        r.bind("<Control-S>", lambda e: self.save_as())
-        r.bind("<Control-Shift-s>", lambda e: self.save_as())
-        r.bind("<Control-c>", guard(self.copy))
-        r.bind("<Control-v>", guard(self.paste))
-        r.bind("<Control-z>", guard(lambda: ed().undo()))
-        r.bind("<Control-y>", guard(lambda: ed().redo()))
-        r.bind("<Control-Z>", guard(lambda: ed().redo()))
-        r.bind("<Control-plus>", lambda e: ed().zoom_by(1.25))
-        r.bind("<Control-equal>", lambda e: ed().zoom_by(1.25))
-        r.bind("<Control-minus>", lambda e: ed().zoom_by(0.8))
-        r.bind("<Control-Key-0>", lambda e: ed().set_zoom(1.0))
-        r.bind("<Control-Key-9>", lambda e: ed().set_zoom(None))
+        r.bind(f"<{MOD}-n>", lambda e: self.capture_region())
+        r.bind(f"<{MOD}-o>", lambda e: self.open_file())
+        r.bind(f"<{MOD}-s>", lambda e: self.save())
+        r.bind(f"<{MOD}-S>", lambda e: self.save_as())
+        r.bind(f"<{MOD}-Shift-s>", lambda e: self.save_as())
+        r.bind(f"<{MOD}-c>", guard(self.copy))
+        r.bind(f"<{MOD}-v>", guard(self.paste))
+        r.bind(f"<{MOD}-z>", guard(lambda: ed().undo()))
+        r.bind(f"<{MOD}-y>", guard(lambda: ed().redo()))
+        r.bind(f"<{MOD}-Z>", guard(lambda: ed().redo()))
+        r.bind(f"<{MOD}-plus>", lambda e: ed().zoom_by(1.25))
+        r.bind(f"<{MOD}-equal>", lambda e: ed().zoom_by(1.25))
+        r.bind(f"<{MOD}-minus>", lambda e: ed().zoom_by(0.8))
+        r.bind(f"<{MOD}-Key-0>", lambda e: ed().set_zoom(1.0))
+        r.bind(f"<{MOD}-Key-9>", lambda e: ed().set_zoom(None))
         r.bind("<Delete>", guard(lambda: ed().delete_selected()))
         r.bind("<BackSpace>", guard(lambda: ed().delete_selected()))
         for keysym, (dx, dy) in {"Left": (-1, 0), "Right": (1, 0), "Up": (0, -1), "Down": (0, 1)}.items():
@@ -561,7 +565,7 @@ class App:
             if sys.platform == "win32":
                 os.startfile(path)  # noqa: S606
             else:
-                subprocess.Popen(["xdg-open", path])
+                subprocess.Popen(["open" if IS_MAC else "xdg-open", path])
             return
         self.open_file(path)
 
@@ -581,9 +585,9 @@ class App:
             "V select · A arrow · L line · R rectangle · E ellipse · P pen",
             "H highlighter · T text · N step number · B blur · C crop",
             "Shift while drawing: snap angle / keep square",
-            "Ctrl+Z undo · Ctrl+Y redo · Del delete · arrows nudge",
-            "Ctrl+S save · Ctrl+Shift+S save as · Ctrl+C copy · Ctrl+V paste",
-            "Ctrl+wheel zoom · Ctrl+0 actual size · Ctrl+9 fit",
+            f"{MODL}Z undo · {MODL}Y redo · Del delete · arrows nudge",
+            f"{MODL}S save · {MODL}⇧S save as · {MODL}C copy · {MODL}V paste",
+            f"{MODL}wheel zoom · {MODL}0 actual size · {MODL}9 fit",
         ]), parent=self.root)
 
     # ==================================================== tray / hotkeys
@@ -600,9 +604,18 @@ class App:
             msg = "Hotkey problem: " + "; ".join(self.hotkeys.errors)
             if any("PrintScreen" in e for e in self.hotkeys.errors) and platform_utils.IS_WIN:
                 msg += " — turn off 'Use the Print screen key to open screen capture' in Windows Settings › Accessibility › Keyboard, or pick another key in Settings."
+            if IS_MAC:
+                msg += " — allow ShotMark in System Settings › Privacy & Security › Accessibility and Input Monitoring, then restart it."
             self.set_status(msg)
 
     def _start_tray(self):
+        if IS_MAC:
+            # pystray needs the macOS main thread, which Tk owns, so use the Dock instead:
+            # clicking the Dock icon reopens the window and Cmd+Q quits.
+            self.root.createcommand("::tk::mac::ReopenApplication", lambda *a: self._show_after_capture())
+            self.root.createcommand("::tk::mac::Quit", lambda *a: self.quit())
+            self.root.createcommand("::tk::mac::ShowPreferences", lambda *a: self.open_settings())
+            return
         try:
             import pystray
         except Exception:  # noqa: BLE001 - missing package or no tray backend
@@ -652,6 +665,9 @@ class App:
         self.root.after(80, self._poll_events)
 
     def on_close(self):
+        if IS_MAC and self.settings["minimize_to_tray"]:
+            self.root.withdraw()  # stays in the Dock; hotkeys keep working
+            return
         if self.tray and self.settings["minimize_to_tray"]:
             self.root.withdraw()
             if not getattr(self, "_tray_hint_shown", False):
@@ -721,13 +737,15 @@ class SettingsDialog:
         row += 1
         add_check("auto_save", "Save every capture automatically")
         add_check("copy_to_clipboard", "Copy every capture to the clipboard")
-        add_check("minimize_to_tray", "Closing the window keeps ShotMark running in the tray")
+        add_check("minimize_to_tray", "Closing the window keeps ShotMark running in the "
+                  + ("Dock" if IS_MAC else "tray"))
         ttk.Separator(f).grid(row=row, column=0, columnspan=3, sticky="we", pady=8)
         row += 1
         add_entry("hotkey_region", "Region hotkey", 20)
         add_entry("hotkey_fullscreen", "Full-screen hotkey", 20)
         add_entry("hotkey_record", "Record GIF hotkey", 20)
-        ttk.Label(f, text="e.g. PrintScreen, Ctrl+Shift+S, Alt+F9 — takes effect after restart",
+        ttk.Label(f, text=("e.g. Cmd+Shift+2, Ctrl+Option+S, F9" if IS_MAC else "e.g. PrintScreen, Ctrl+Shift+S, Alt+F9")
+                  + " — takes effect after restart",
                   foreground="#777").grid(row=row, column=0, columnspan=3, sticky="w")
         row += 1
         ttk.Separator(f).grid(row=row, column=0, columnspan=3, sticky="we", pady=8)
@@ -759,7 +777,7 @@ class SettingsDialog:
                 new[k] = val.strip()
         for k in ("hotkey_region", "hotkey_fullscreen", "hotkey_record"):
             try:
-                platform_utils.parse_hotkey(new[k])
+                (platform_utils.parse_mac_hotkey if IS_MAC else platform_utils.parse_hotkey)(new[k])
             except ValueError as e:
                 messagebox.showerror("Settings", f"Hotkey '{new[k]}': {e}", parent=self.win)
                 return
