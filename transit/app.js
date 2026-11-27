@@ -29,7 +29,7 @@ const T = {
     route: 'Route', arrivesIn: n => n <= 0 ? 'Arriving now' : `Arrives in ${n} min`, leaves: n => n <= 0 ? 'leaving now' : `leaves in ${n} min`,
     noResults: 'No matches', locating: 'Finding your location…', noLoc: 'Location is unavailable. Pick a starting point.',
     stopsOnMap: 'Zoom in on the map to see stops', prev: 'Back', next: 'Next', trip: 'Line', delayed: n => `${n} min late`, early: n => `${n} min early`,
-    onTime: 'On time', noData: 'Data: Transitous · OpenStreetMap · CARTO',
+    onTime: 'On time', noData: 'Data: Transitous · OpenStreetMap',
   },
   he: {
     whereTo: 'לאן?', home: 'בית', work: 'עבודה', setHome: 'הגדרת בית', setWork: 'הגדרת עבודה',
@@ -49,7 +49,7 @@ const T = {
     route: 'מסלול', arrivesIn: n => n <= 0 ? 'מגיע עכשיו' : `מגיע בעוד ${n} דק׳`, leaves: n => n <= 0 ? 'יוצא עכשיו' : `יוצא בעוד ${n} דק׳`,
     noResults: 'לא נמצאו תוצאות', locating: 'מאתר את המיקום שלך…', noLoc: 'המיקום לא זמין. בחרו נקודת מוצא.',
     stopsOnMap: 'הגדילו את המפה כדי לראות תחנות', prev: 'הקודם', next: 'הבא', trip: 'קו', delayed: n => `איחור ${n} דק׳`, early: n => `${n} דק׳ מוקדם`,
-    onTime: 'בזמן', noData: 'נתונים: Transitous · OpenStreetMap · CARTO',
+    onTime: 'בזמן', noData: 'נתונים: Transitous · OpenStreetMap',
   },
 };
 let lang = store.get('lang', (navigator.language || '').toLowerCase().startsWith('he') ? 'he' : 'en');
@@ -178,17 +178,11 @@ const stopCache = {};
 const map = L.map('map', { zoomControl: false, attributionControl: true }).setView(store.get('view', [32.0853, 34.7818]), store.get('zoom', 15));
 map.attributionControl.setPrefix(false);
 const darkQ = matchMedia('(prefers-color-scheme: dark)');
-let tiles;
-function setTiles() {
-  tiles?.remove();
-  const style = darkQ.matches ? 'dark_all' : 'rastertiles/voyager';
-  tiles = L.tileLayer(`https://{s}.basemaps.cartocdn.com/${style}/{z}/{x}/{y}{r}.png`, {
-    subdomains: 'abcd', maxZoom: 20,
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a> · <a href="https://transitous.org/sources/">Transitous</a>',
-  }).addTo(map);
-}
-setTiles();
-darkQ.addEventListener?.('change', setTiles);
+// OpenStreetMap's standard tiles need no key; dark mode darkens them with a CSS filter (see index.html).
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://transitous.org/sources/">Transitous</a>',
+}).addTo(map);
 const routeLayer = L.layerGroup().addTo(map);
 const stopsLayer = L.layerGroup().addTo(map);
 let meMarker = null, meCircle = null;
