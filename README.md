@@ -43,3 +43,8 @@ advice, or for the instructions of an emergency dispatcher. In an emergency, alw
 
 All content lives in the `TOPICS` and `UI` objects in `index.html`; adding a language means
 adding one more key next to `he` and `en`.
+
+## Also in this repository
+
+`shared-lists/` holds a separate app, **רשימות · Shared Lists** (a shared task planner).
+See [`shared-lists/README.md`](shared-lists/README.md). It does not affect First Minutes.
